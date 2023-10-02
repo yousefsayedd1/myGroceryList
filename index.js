@@ -14,13 +14,25 @@ const addButtonEl = document.getElementById("add-button")
 const shoppingListEl = document.getElementById("shopping-list")
 
 addButtonEl.addEventListener("click", function() {
-    let inputValue = inputFieldEl.value
-    
-    push(shoppingListInDB, inputValue)
-    
-    clearInputFieldEl()
-})
+    let inputValue = inputFieldEl.value;
+    if (inputValue === '')
+    {
+        let storeInnerHTMl = shoppingListEl.innerHTML;
+        shoppingListEl.innerHTML = "<p>You can't add an empty item</p>" ;
+        setTimeout(function () {
+            displayDatabaseValues();
+        },1000)
+    }
+    else 
+    {
+        push(shoppingListInDB, inputValue);
+        clearInputFieldEl();
 
+    }
+
+})
+displayDatabaseValues();
+function displayDatabaseValues () {
 onValue(shoppingListInDB, function(snapshot) {
     if (snapshot.exists()) {
         let itemsArray = Object.entries(snapshot.val())
@@ -38,7 +50,7 @@ onValue(shoppingListInDB, function(snapshot) {
         shoppingListEl.innerHTML = "No items here... yet"
     }
 })
-
+}
 function clearShoppingListEl() {
     shoppingListEl.innerHTML = ""
 }
